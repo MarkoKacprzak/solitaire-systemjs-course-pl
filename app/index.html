@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="klondike/game.css">
     <!-- <script src="bower_components/traceur/traceur.js"></script> -->
     <script src="bower_components/system.js/dist/system.js"></script>
+    <script src="config.js"></script>
     <script src="lib/System.yuml.js"></script>
 </head>
 
@@ -33,15 +34,6 @@
     <script src="cards/cards.js"></script>
     -->
     <script>
-        System.config({
-            transpiler: "babel",
-            map: {
-                "babel": "../node_modules/babel-core/browser.js"
-            },
-            babelOptions: {
-                stage: 0
-            }
-        });
         System.import("./app.js");
     </script>
 </body>
