@@ -26,6 +26,9 @@ window.showModuleRelationships = function() {
             var name = displayName(module.name);
 
             var dependencies = module.deps
+                .map(function(dependency) {
+                    return System.normalizeSync(dependency, module.name, module.address)
+                })
                 .map(displayName)
                 .map(function(dependencyName) {
                     return "[" + name + "]->[" + dependencyName + "]"
