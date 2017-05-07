@@ -1,4 +1,4 @@
-function Card(card) {
+export default function Card(card) {
     this.figura = card.figura;
     this.rank = card.rank;
     this.image = (Card.ranksInImagesOrder.indexOf(this.rank) * 4 + Card.suitsInImagesOrder.indexOf(this.figura) + 1) + ".png";
