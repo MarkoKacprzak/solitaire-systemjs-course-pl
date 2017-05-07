@@ -1,59 +1,60 @@
-describe("A foundation pile", function () {
-  "use strict";
+import Card from "card";
+describe("A foundation pile", function() {
+    "use strict";
 
-  it("that is empty will accept an ace", function () {
-      var ace = new Card({ rank: "Ace", figura: "Trefl"});
-    var foundation = new FoundationPile();
+    it("that is empty will accept an ace", function() {
+        var ace = new Card({ rank: "Ace", figura: "Trefl" });
+        var foundation = new FoundationPile();
 
-    var accepted = foundation.drop(ace);
+        var accepted = foundation.drop(ace);
 
-    expect(accepted).toBe(true);
-    expect(foundation.topCard()).toBe(ace);
-  });
+        expect(accepted).toBe(true);
+        expect(foundation.topCard()).toBe(ace);
+    });
 
-  it("that is empty will not accept a rank other than ace", function () {
-      var king = new Card({ rank: "King", figura: "Trefl"});
-    var foundation = new FoundationPile();
+    it("that is empty will not accept a rank other than ace", function() {
+        var king = new Card({ rank: "King", figura: "Trefl" });
+        var foundation = new FoundationPile();
 
-    var accepted = foundation.drop(king);
+        var accepted = foundation.drop(king);
 
-    expect(accepted).toBe(false);
-    expect(foundation.isEmpty()).toBe(true);
-  });
+        expect(accepted).toBe(false);
+        expect(foundation.isEmpty()).toBe(true);
+    });
 
-  it("will accept next rank in same suit", function() {
-      var aceOfClubs = new Card({ rank: "Ace", figura: "Trefl"});
-    var foundation = new FoundationPile();
-    foundation.drop(aceOfClubs);
-    var twoOfClubs = new Card({ rank: "2", figura: "Trefl"});
+    it("will accept next rank in same suit", function() {
+        var aceOfClubs = new Card({ rank: "Ace", figura: "Trefl" });
+        var foundation = new FoundationPile();
+        foundation.drop(aceOfClubs);
+        var twoOfClubs = new Card({ rank: "2", figura: "Trefl" });
 
-    var accepted = foundation.drop(twoOfClubs);
+        var accepted = foundation.drop(twoOfClubs);
 
-    expect(accepted).toBe(true);
-    expect(foundation.topCard()).toBe(twoOfClubs);
-  });
+        expect(accepted).toBe(true);
+        expect(foundation.topCard()).toBe(twoOfClubs);
+    });
 
-  it("will not accept same suit but not next rank", function() {
-      var aceOfClubs = new Card({ rank: "Ace", figura: "Trefl"});
-    var foundation = new FoundationPile();
-    foundation.drop(aceOfClubs);
-    var threeOfClubs = new Card({ rank: "3", figura: "Trefl"});
+    it("will not accept same suit but not next rank", function() {
+        var aceOfClubs = new Card({ rank: "Ace", figura: "Trefl" });
+        var foundation = new FoundationPile();
+        foundation.drop(aceOfClubs);
+        var threeOfClubs = new Card({ rank: "3", figura: "Trefl" });
 
-    var accepted = foundation.drop(threeOfClubs);
+        var accepted = foundation.drop(threeOfClubs);
 
-    expect(accepted).toBe(false);
-    expect(foundation.topCard()).toBe(aceOfClubs);
-  });
+        expect(accepted).toBe(false);
+        expect(foundation.topCard()).toBe(aceOfClubs);
+    });
 
-  it("will not accept different suit", function() {
-      var aceOfClubs = new Card({ rank: "Ace", figura: "Clubs"});
-    var foundation = new FoundationPile();
-    foundation.drop(aceOfClubs);
-    var twoOfHearts = new Card({ rank: "2", figura: "Kier"});
+    it("will not accept different suit", function() {
+        var aceOfClubs = new Card({ rank: "Ace", figura: "Clubs" });
+        var foundation = new FoundationPile();
+        foundation.drop(aceOfClubs);
+        var twoOfHearts = new Card({ rank: "2", figura: "Kier" });
 
-    var accepted = foundation.drop(twoOfHearts);
+        var accepted = foundation.drop(twoOfHearts);
 
-    expect(accepted).toBe(false);
-    expect(foundation.topCard()).toBe(aceOfClubs);
-  });
+        expect(accepted).toBe(false);
+        expect(foundation.topCard()).toBe(aceOfClubs);
+    });
 });

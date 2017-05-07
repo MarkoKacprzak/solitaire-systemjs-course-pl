@@ -1,160 +1,163 @@
-describe("A tableau pile", function () {
-  "use strict";
+import Card from "card";
+import "../../../app/klondike/klondike.js";
 
-  beforeEach(module("klondike.scoring"));
+describe("A tableau pile", function() {
+    "use strict";
 
-  it("that is empty will accept a king", function () {
-      var king = new Card({ rank: "King", figura: "Trefl"});
-    var tableau = new TableauPile();
+    beforeEach(module("klondike.scoring"));
 
-    var accepted = tableau.drop(king);
+    it("that is empty will accept a king", function() {
+        var king = new Card({ rank: "King", figura: "Trefl" });
+        var tableau = new TableauPile();
 
-    expect(accepted).toBe(true);
-    expect(tableau.topCard()).toBe(king);
-  });
+        var accepted = tableau.drop(king);
 
-  it("that is empty will not accept a rank other than king", function () {
-      var ace = new Card({ rank: "Ace", figura: "Trefl"});
-    var tableau = new TableauPile();
+        expect(accepted).toBe(true);
+        expect(tableau.topCard()).toBe(king);
+    });
 
-    var accepted = tableau.drop(ace);
+    it("that is empty will not accept a rank other than king", function() {
+        var ace = new Card({ rank: "Ace", figura: "Trefl" });
+        var tableau = new TableauPile();
 
-    expect(accepted).toBe(false);
-    expect(tableau.isEmpty()).toBe(true);
-  });
+        var accepted = tableau.drop(ace);
 
-  it("will accept lower rank in alternate color", function () {
-      var kingOfClubs = new Card({ rank: "King", figura: "Trefl"});
-    var tableau = new TableauPile();
-    tableau.drop(kingOfClubs);
-    var queenOfHearts = new Card({ rank: "Queen", figura: "Kier"});
+        expect(accepted).toBe(false);
+        expect(tableau.isEmpty()).toBe(true);
+    });
 
-    var accepted = tableau.drop(queenOfHearts);
+    it("will accept lower rank in alternate color", function() {
+        var kingOfClubs = new Card({ rank: "King", figura: "Trefl" });
+        var tableau = new TableauPile();
+        tableau.drop(kingOfClubs);
+        var queenOfHearts = new Card({ rank: "Queen", figura: "Kier" });
 
-    expect(accepted).toBe(true);
-    expect(tableau.topCard()).toBe(queenOfHearts);
-  });
+        var accepted = tableau.drop(queenOfHearts);
 
-  it("will not accept lower rank in same color", function () {
-      var kingOfClubs = new Card({ rank: "King", figura: "Trefl"});
-    var tableau = new TableauPile();
-    tableau.drop(kingOfClubs);
-    var queenOfClubs = new Card({ rank: "Queen", figura: "Trefl"});
+        expect(accepted).toBe(true);
+        expect(tableau.topCard()).toBe(queenOfHearts);
+    });
 
-    var accepted = tableau.drop(queenOfClubs);
+    it("will not accept lower rank in same color", function() {
+        var kingOfClubs = new Card({ rank: "King", figura: "Trefl" });
+        var tableau = new TableauPile();
+        tableau.drop(kingOfClubs);
+        var queenOfClubs = new Card({ rank: "Queen", figura: "Trefl" });
 
-    expect(accepted).toBe(false);
-    expect(tableau.topCard()).toBe(kingOfClubs);
-  });
+        var accepted = tableau.drop(queenOfClubs);
 
-  it("will not accept different color if not next lower rank", function () {
-      var kingOfClubs = new Card({ rank: "King", figura: "Trefl"});
-    var tableau = new TableauPile();
-    tableau.drop(kingOfClubs);
-    var jackOfHearts = new Card({ rank: "Jack", figura: "Kier"});
+        expect(accepted).toBe(false);
+        expect(tableau.topCard()).toBe(kingOfClubs);
+    });
 
-    var accepted = tableau.drop(jackOfHearts);
+    it("will not accept different color if not next lower rank", function() {
+        var kingOfClubs = new Card({ rank: "King", figura: "Trefl" });
+        var tableau = new TableauPile();
+        tableau.drop(kingOfClubs);
+        var jackOfHearts = new Card({ rank: "Jack", figura: "Kier" });
 
-    expect(accepted).toBe(false);
-    expect(tableau.topCard()).toBe(kingOfClubs);
-  });
+        var accepted = tableau.drop(jackOfHearts);
 
-  it("will flip over next card if top card removed", inject(function (scoring) {
-      var kingOfClubs = new Card({ rank: "King", figura: "Trefl"});
-    var tableau = new TableauPile([], scoring);
-    tableau.addTopCard(kingOfClubs);
-    var jackOfHearts = new Card({ rank: "Jack", figura: "Kier"});
-    tableau.addTopCard(jackOfHearts);
-    expect(kingOfClubs.turnedUp).toBe(false);
+        expect(accepted).toBe(false);
+        expect(tableau.topCard()).toBe(kingOfClubs);
+    });
 
-    tableau.removeCard(jackOfHearts);
+    it("will flip over next card if top card removed", inject(function(scoring) {
+        var kingOfClubs = new Card({ rank: "King", figura: "Trefl" });
+        var tableau = new TableauPile([], scoring);
+        tableau.addTopCard(kingOfClubs);
+        var jackOfHearts = new Card({ rank: "Jack", figura: "Kier" });
+        tableau.addTopCard(jackOfHearts);
+        expect(kingOfClubs.turnedUp).toBe(false);
 
-    expect(kingOfClubs.turnedUp).toBe(true);
-  }));
+        tableau.removeCard(jackOfHearts);
 
-  it("will not error if no next card after removing top", function () {
-      var jackOfHearts = new Card({ rank: "Jack", figura: "Kier"});
-    var tableau = new TableauPile();
-    tableau.addTopCard(jackOfHearts);
+        expect(kingOfClubs.turnedUp).toBe(true);
+    }));
 
-    tableau.removeCard(jackOfHearts);
-  });
+    it("will not error if no next card after removing top", function() {
+        var jackOfHearts = new Card({ rank: "Jack", figura: "Kier" });
+        var tableau = new TableauPile();
+        tableau.addTopCard(jackOfHearts);
 
-  it("will not error if event received to move from pile that doesn't exist", function () {
-    var source = new TableauPile([]);
+        tableau.removeCard(jackOfHearts);
+    });
 
-    source.moveCardsFrom(null);
-  });
+    it("will not error if event received to move from pile that doesn't exist", function() {
+        var source = new TableauPile([]);
 
-  it("will accept all of another tableau", inject(function (scoring) {
-      var hidden = new Card({ rank: "10", figura: "Kier"});
-      var blackFour = new Card({ rank: "4", figura: "Pik"});
-    blackFour.turnUp();
-    var redThree = new Card({ rank: "3", figura: "Kier"});
-    redThree.turnUp();
-    var source = new TableauPile([hidden, blackFour, redThree], scoring);
+        source.moveCardsFrom(null);
+    });
 
-    var redFive = new Card({ rank: "5", figura: "Kier"});
-    redFive.turnUp();
-    var destination = new TableauPile([redFive], scoring);
+    it("will accept all of another tableau", inject(function(scoring) {
+        var hidden = new Card({ rank: "10", figura: "Kier" });
+        var blackFour = new Card({ rank: "4", figura: "Pik" });
+        blackFour.turnUp();
+        var redThree = new Card({ rank: "3", figura: "Kier" });
+        redThree.turnUp();
+        var source = new TableauPile([hidden, blackFour, redThree], scoring);
 
-    destination.moveCardsFrom(source);
+        var redFive = new Card({ rank: "5", figura: "Kier" });
+        redFive.turnUp();
+        var destination = new TableauPile([redFive], scoring);
 
-    expect(source.cards).toEqual([hidden]);
-    expect(destination.cards).toEqual([redFive, blackFour, redThree]);
-    expect(hidden.turnedUp).toBe(true);
-  }));
+        destination.moveCardsFrom(source);
 
-  it("will accept part of another tableau", function () {
-      var hidden = new Card({ rank: "10", figura: "Kier"});
-      var redDiamond = new Card({ rank: "5", figura: "Karo"});
-    redDiamond.turnUp();
-    var blackFour = new Card({ rank: "4", figura: "Pik"});
-    blackFour.turnUp();
-    var redThree = new Card({ rank: "3", figura: "Kier"});
-    redThree.turnUp();
-    var source = new TableauPile([hidden, redDiamond, blackFour, redThree]);
+        expect(source.cards).toEqual([hidden]);
+        expect(destination.cards).toEqual([redFive, blackFour, redThree]);
+        expect(hidden.turnedUp).toBe(true);
+    }));
 
-    var redHeart = new Card({ rank: "5", figura: "Kier"});
-    redHeart.turnUp();
-    var destination = new TableauPile([redHeart]);
+    it("will accept part of another tableau", function() {
+        var hidden = new Card({ rank: "10", figura: "Kier" });
+        var redDiamond = new Card({ rank: "5", figura: "Karo" });
+        redDiamond.turnUp();
+        var blackFour = new Card({ rank: "4", figura: "Pik" });
+        blackFour.turnUp();
+        var redThree = new Card({ rank: "3", figura: "Kier" });
+        redThree.turnUp();
+        var source = new TableauPile([hidden, redDiamond, blackFour, redThree]);
 
-    destination.moveCardsFrom(source);
+        var redHeart = new Card({ rank: "5", figura: "Kier" });
+        redHeart.turnUp();
+        var destination = new TableauPile([redHeart]);
 
-    expect(source.cards).toEqual([hidden, redDiamond]);
-    expect(destination.cards).toEqual([redHeart, blackFour, redThree]);
-  });
+        destination.moveCardsFrom(source);
 
-  it("will not accept turned down part of another tableau", function () {
-      var blackFourDown = new Card({ rank: "4", figura: "Pik"});
-      var redThree = new Card({ rank: "3", figura: "Kier"});
-    redThree.turnUp();
-    var source = new TableauPile([blackFourDown, redThree]);
+        expect(source.cards).toEqual([hidden, redDiamond]);
+        expect(destination.cards).toEqual([redHeart, blackFour, redThree]);
+    });
 
-    var redHeart = new Card({ rank: "5", figura: "Kier"});
-    redHeart.turnUp();
-    var destination = new TableauPile([redHeart]);
+    it("will not accept turned down part of another tableau", function() {
+        var blackFourDown = new Card({ rank: "4", figura: "Pik" });
+        var redThree = new Card({ rank: "3", figura: "Kier" });
+        redThree.turnUp();
+        var source = new TableauPile([blackFourDown, redThree]);
 
-    destination.moveCardsFrom(source);
+        var redHeart = new Card({ rank: "5", figura: "Kier" });
+        redHeart.turnUp();
+        var destination = new TableauPile([redHeart]);
 
-    expect(source.cards).toEqual([blackFourDown, redThree]);
-    expect(destination.cards).toEqual([redHeart]);
-  });
+        destination.moveCardsFrom(source);
 
-  it("will not accept multiple from a pile that isn't another tableau", function () {
-      var blackFour = new Card({ rank: "4", figura: "Pik"});
-    blackFour.turnUp();
-    var redThree = new Card({ rank: "3", figura: "Kier"});
-    redThree.turnUp();
-    var remainder = new RemainderPile([blackFour, redThree]);
+        expect(source.cards).toEqual([blackFourDown, redThree]);
+        expect(destination.cards).toEqual([redHeart]);
+    });
 
-    var redFive = new Card({ rank: "5", figura: "Kier"});
-    redFive.turnUp();
-    var tableau = new TableauPile([redFive]);
+    it("will not accept multiple from a pile that isn't another tableau", function() {
+        var blackFour = new Card({ rank: "4", figura: "Pik" });
+        blackFour.turnUp();
+        var redThree = new Card({ rank: "3", figura: "Kier" });
+        redThree.turnUp();
+        var remainder = new RemainderPile([blackFour, redThree]);
 
-    tableau.moveCardsFrom(remainder);
+        var redFive = new Card({ rank: "5", figura: "Kier" });
+        redFive.turnUp();
+        var tableau = new TableauPile([redFive]);
 
-    expect(remainder.cards).toEqual([blackFour, redThree]);
-    expect(tableau.cards).toEqual([redFive]);
-  });
+        tableau.moveCardsFrom(remainder);
+
+        expect(remainder.cards).toEqual([blackFour, redThree]);
+        expect(tableau.cards).toEqual([redFive]);
+    });
 });
