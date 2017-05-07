@@ -21,7 +21,8 @@ module.exports = function(config) {
         ],
 
         proxies: {
-            "/node_modules": "/base/node_modules"
+            "/node_modules": "/base/node_modules",
+            "/base/cards": "/base/app/cards"
         },
 
         jspm: {
