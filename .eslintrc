@@ -1,12 +1,12 @@
 {
-  "globals": {
-    "angular": false,
-    "_": false
-  },
-  "rules": {
-    "no-use-before-define": [
-      2,
-      "nofunc"
-    ]
-  }
+    "globals": {
+        "angular": false,
+        "_": false
+    },
+    "rules": {
+        "no-use-before-define": [
+            2,
+            "nofunc"
+        ]
+    }
 }
