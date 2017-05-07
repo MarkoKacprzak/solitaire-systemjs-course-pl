@@ -1,6 +1,9 @@
 import Card from "card";
 import "../../../app/klondike/klondike.js";
 
+import RemainderPile from "../../../app/klondike/piles/remainderPile.js";
+import TableauPile from "../../../app/klondike/piles/tableauPile.js";
+
 describe("A tableau pile", function() {
     "use strict";
 
