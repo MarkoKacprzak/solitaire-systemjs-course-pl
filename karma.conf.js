@@ -33,7 +33,7 @@ module.exports = function(config) {
                 "node_modules/babel-core/browser.js"
             ],
             loadFiles: [
-                "tests/cards/card_test.js",
+                "tests/cards/*.js",
             ]
         },
 
