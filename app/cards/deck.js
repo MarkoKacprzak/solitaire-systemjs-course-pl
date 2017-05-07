@@ -1,6 +1,7 @@
-import Card from "./card.js";
+var Card = require("./card.js").default;
+module.exports = Deck;
 
-export default function Deck() {
+function Deck() {
     this.unShuffled = function unShuffled() {
         return _.chain(Card.ranksInImagesOrder)
             .map(function(rank) {
