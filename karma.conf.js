@@ -34,7 +34,7 @@ module.exports = function(config) {
             ],
             loadFiles: [
                 "tests/cards/*.js",
-                "tests/klondike/piles/*.js"
+                "tests/klondike/**/*.js"
             ]
         },
 
